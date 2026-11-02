@@ -1,0 +1,15 @@
+name: project-checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python docs/scripts/check_project.py
+      - run: python code/run_experiment.py --config configs/pilot.json --dry-run
+      - run: python -m compileall -q code docs/scripts

@@ -1,0 +1,16 @@
+{
+  "status": "proposal",
+  "backend": "unselected",
+  "methods": [
+    "random",
+    "grid",
+    "targeted"
+  ],
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "simulation_calls_per_run": 100,
+  "note": "Planning placeholder only; bounds, thresholds and proposed method are not frozen."
+}
