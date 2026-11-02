@@ -11,6 +11,7 @@ import jsbsim
 PROPERTIES = ["position/h-agl-ft", "attitude/phi-rad", "attitude/theta-rad",
               "velocities/u-fps", "velocities/v-fps", "velocities/w-fps"]
 
+
 def run(seconds):
     f = jsbsim.FGFDMExec(None)
     f.set_debug_level(0)
@@ -32,8 +33,10 @@ def run(seconds):
     assets = {}
     for folder in ("aircraft", "engine", "systems", "scripts"):
         for asset in sorted((root / folder).rglob("*.xml")):
-            assets[str(asset.relative_to(root))] = hashlib.sha256(asset.read_bytes()).hexdigest()
+            assets[str(asset.relative_to(root))] = hashlib.sha256(
+                asset.read_bytes()).hexdigest()
     return rows, time.perf_counter() - start, assets
+
 
 def main():
     p = argparse.ArgumentParser()
@@ -60,9 +63,11 @@ def main():
     a.output.write_text(json.dumps(report, indent=2) + "\n")
     trajectory = a.output.with_suffix(".trajectory.json")
     trajectory.write_text(json.dumps(rows) + "\n")
-    print(json.dumps({k:v for k,v in report.items() if k != "asset_sha256"}, indent=2))
+    print(json.dumps({k: v for k, v in report.items()
+          if k != "asset_sha256"}, indent=2))
     if rows != replay:
         raise SystemExit("Replay differs")
+
 
 if __name__ == "__main__":
     main()
