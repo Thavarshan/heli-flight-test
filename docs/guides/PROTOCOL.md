@@ -1,10 +1,10 @@
 # Proposed study protocol — not preregistered
 
 ## Question
-Under equal simulation budgets, can targeted search discover and reduce hover-control failures more efficiently than random sampling and a fixed grid?
+Under matched simulation budgets, does replay-aware scenario reduction preserve the same helicopter hover-control violation more reliably on held-out numerical replay conditions than nominal-only reduction?
 
 ## Candidate contribution
-A search-and-reduction method exploiting disturbance timing and controller response. Novelty remains unverified. A generic simulator wrapper alone is insufficient.
+A reduction acceptance predicate using a declared numerical replay set, evaluated for simplicity, retention and cost. See RESEARCH_TOPIC.md for the current selected direction. Generic search supports corpus construction; a novel search optimizer is no longer the primary contribution. Novelty remains unverified.
 
 ## Initial scope
 One conventional helicopter model; fixed-position hover; fixed controller; gust amplitude/direction/onset/duration and sensor delay. Choose numerical ranges only after model validation and a development pilot. Faults must be injected at documented interfaces, with correct physical units. Delayed measurements retain timestamps; never silently substitute delayed true state into the physics.
@@ -26,3 +26,6 @@ Search without response-informed guidance; reduction disabled; individual distur
 
 ## Paper gate
 Related-work gap verified; protocol frozen; validation documented; raw evidence and provenance available; figures/tables regenerated; claims audited against evidence.
+
+## Decision amendment — 2026-11-02
+RESEARCH_TOPIC.md specifies the revised primary/secondary research questions and reduction baselines. SUBMISSION_PLAN.md selects the planning venue. The preceding search comparisons are supporting corpus-generation analysis, not the primary hypothesis. Neither these documents nor configs/pilot.json are a frozen confirmatory protocol. Pilot thresholds, sample size and budgets remain unresolved.

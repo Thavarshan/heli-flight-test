@@ -1,0 +1,3 @@
+# Preserve official template assets exactly as recorded in provenance.
+docs/paper/ieeeconf.cls -text -whitespace
+docs/paper/IEEEtran.bst -text -whitespace

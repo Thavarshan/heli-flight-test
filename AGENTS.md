@@ -21,3 +21,6 @@ Use concise formal English and LaTeX. Research-Paper.tex is manuscript source of
 
 ## Scope
 First implement and validate one helicopter backend and stable hover. Then add wind gusts and sensor delay. Autopilot novelty, full flight envelopes, autorotation and real hardware are later scope decisions.
+
+## Current research/venue decision
+Read RESEARCH_TOPIC.md, RELATED_WORK.md, SUBMISSION_PLAN.md and AI_USAGE.md in docs/guides. The primary hypothesis now concerns replay-aware reduction, not a novel general search algorithm. ICUAS 2027 is the planning target. Use the recorded anonymous-review rules and page budget; recheck official sources before submission. Keep all claims provisional until the validation, novelty and confirmatory-study gates pass. Retain the public development repo but never use its identifying URL in the anonymous submission. Maintain the AI-use record honestly.

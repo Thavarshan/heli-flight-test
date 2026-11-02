@@ -21,3 +21,6 @@ Review queue: helicopter hover falsification; search-based control-system testin
 - Automated Testing with Temporal Logic Specifications for Robotic Controllers using Adaptive Experiment Design (2021 preprint): https://arxiv.org/abs/2109.08071 . Related controller-testing work uses a surrogate model; inspect as prior art, but do not adopt model learning into this project.
 
 These are an initial screen, not a systematic review. Next: inspect full methods and artifacts, helicopter-specific evaluations, non-learning optimizer baselines, and prior scenario reduction. Candidate contribution remains open: reproducible helicopter-specific benchmarks and a demonstrably different search/reduction method. Do not claim either contribution is novel yet.
+
+## Focused review update
+See RELATED_WORK.md for the current comparison, including prior helicopter-model debugging and robotic-vehicle input minimization. The selected hypothesis and novelty gates are in RESEARCH_TOPIC.md. Replace any claim that helicopter testing or failure reduction itself is new with a precise, evidenced method comparison.

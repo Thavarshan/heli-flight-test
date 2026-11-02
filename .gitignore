@@ -7,3 +7,7 @@ __pycache__/
 results/runs/
 work/
 results/preliminary/*.trajectory.json
+*.bbl
+*.blg
+*.toc
+docs/paper/Research-Paper.pdf

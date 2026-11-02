@@ -13,3 +13,22 @@ jobs:
       - run: python docs/scripts/check_project.py
       - run: python code/run_experiment.py --config configs/pilot.json --dry-run
       - run: python -m compileall -q code docs/scripts
+      - run: python docs/scripts/check_submission.py
+
+  paper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install paper build tools
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-recommended poppler-utils
+      - name: Build manuscript scaffold
+        working-directory: docs/paper
+        run: |
+          pdflatex -interaction=nonstopmode -halt-on-error Research-Paper.tex
+          bibtex Research-Paper
+          pdflatex -interaction=nonstopmode -halt-on-error Research-Paper.tex
+          pdflatex -interaction=nonstopmode -halt-on-error Research-Paper.tex
+      - run: python docs/scripts/check_submission.py --pdf docs/paper/Research-Paper.pdf

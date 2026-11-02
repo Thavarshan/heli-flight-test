@@ -1,24 +1,58 @@
-\documentclass[conference]{IEEEtran}
-\usepackage{amsmath,booktabs,graphicx,cite}
-\title{Search-Based Discovery and Reduction of Helicopter Hover-Control Failures in Simulation}
-\author{\IEEEauthorblockN{Author details pending}}
+% Research proposal scaffold, not a completed submission.
+% Target and verification record: ../guides/SUBMISSION_PLAN.md
+\documentclass[letterpaper,10pt,conference]{ieeeconf}
+\overrideIEEEmargins
+\usepackage{amsmath,amssymb,booktabs,graphicx,cite}
+\usepackage[pdfauthor={},pdftitle={Replay-Stable Reduction of Helicopter Hover-Control Failure Scenarios}]{hyperref}
+\title{\LARGE\bf Replay-Stable Reduction of Helicopter Hover-Control Failure Scenarios}
+% Anonymous review: no author block, affiliation, identifying funding or repository URL.
 \begin{document}
 \maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
 \begin{abstract}
-This manuscript scaffold proposes an automated approach to discovering and reducing helicopter hover-control failures in simulation. The planned evaluation compares targeted scenario search with random sampling and a fixed grid under equal simulation budgets. Simulator validation and experimental evaluation remain pending; no performance or novelty claims are made.
+This proposal investigates reducing simulation scenarios that violate helicopter hover-control requirements while retaining the same violation under a declared set of replay conditions. The planned study compares event deletion and continuous-parameter shrinking with and without replay-aware acceptance under matched simulation budgets. Model validation, controller implementation and evaluation remain pending; no improvement or novelty claim is established.
 \end{abstract}
+
 \section{Introduction}
-% Establish motivation and verified contribution after literature review.
+% Motivate actionable failure reproducers. State measured contributions only after evaluation.
+% Planned contribution: a replay-aware reduction predicate and an empirical trade-off study.
+
 \section{Related Work}
-% Add only verified references; compare against control falsification and scenario reduction.
-\section{System and Method}
-% Document validated helicopter model, controller, frames, fault interfaces and algorithms.
-\section{Experimental Protocol}
-% Translate frozen docs/guides/PROTOCOL.md into reproducible methods.
+Time-structured falsification has been investigated previously~\cite{ernst2022}.
+Prior work includes debugging a small helicopter control model~\cite{singh2020} and minimizing bug-triggering robotic-vehicle inputs~\cite{wang2026}.
+% Explain precise distinctions; a helicopter application alone does not establish novelty.
+
+\section{Helicopter Model and Validation}
+% Aircraft provenance/license, model equations/reference, controller, units/frames, trim,
+% stable position hold, numerical convergence and external-validation limitations.
+
+\section{Scenario Reduction Method}
+\subsection{Admissible Disturbances and Failure Signature}
+% Smooth bounded gusts, timestamped delay, fixed controller/sensor clocks and dwell semantics.
+\subsection{Replay-Aware Acceptance}
+% Define replay-set predicate and violation margin; no global-minimality or physical-safety claim.
+\subsection{Reduction Operators and Budget}
+% Event deletion then continuous shrinking; count all validation simulations.
+
+\section{Experimental Design}
+% Shared failure corpus, development/evaluation split, nominal-only and post-hoc baselines,
+% matched compute, held-out replay tests, clustering unit and uncertainty intervals.
+
 \section{Results and Discussion}
-No experimental results are available.
-\section{Limitations}
-The planned evaluation concerns behaviour in a selected simulation model. Physical flight performance has not been established.
+No confirmatory experimental results are available.
+% Generate all tables/figures from evidence; include failed reductions and negative findings.
+
+\section{Limitations and Threats to Validity}
+The proposed study concerns one simulation testbed. Real-helicopter behaviour and generalization to other aircraft have not been established. The existing feasibility probe is not a validated fixed-position hover experiment.
+
 \section{Conclusion}
-% Write after analysis; do not predict findings.
+% Write after evaluation; do not predict outcomes.
+
+\section*{AI-Use Disclosure}
+OpenAI Codex generated this proposal scaffold and assisted with research planning and preliminary code. A final disclosure must identify the affected manuscript sections and extent of use. Scientific validation and human author review remain pending.
+% Review disclosure placement with conference instructions before upload; do not silently omit.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 \end{document}

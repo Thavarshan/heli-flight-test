@@ -1,10 +1,14 @@
 # Helicopter Flight-Test Research
 
-Working title: Search-Based Discovery and Reduction of Helicopter Hover-Control Failures in Simulation.
+Working title: Replay-Stable Reduction of Helicopter Hover-Control Failure Scenarios.
 
 Status: preliminary backend feasibility. A pinned JSBSim AH-1S example runs headlessly and replays identically within the tested local environment; fixed-position hover is not yet validated. No helicopter backend, autopilot, experimental results, or novelty claim has been validated yet. No AI/ML or model training is planned.
 
 See [preliminary feasibility](docs/guides/FEASIBILITY.md) and `code/probe_backend.py` for the first executable milestone.
+
+## Research and submission direction
+
+See [selected topic](docs/guides/RESEARCH_TOPIC.md), [closest prior work](docs/guides/RELATED_WORK.md), and [submission plan](docs/guides/SUBMISSION_PLAN.md). The planning target is ICUAS 2027; the proposal and evidence are not submission-ready. The main contribution under investigation is replay-aware scenario reduction. Established search methods will generate the shared failure corpus.
 
 ## Workflow
 Research → model validation → baseline hover → fault injection → search comparison → failure reduction → statistics → paper.
@@ -37,6 +41,16 @@ Paper compilation, once LaTeX is installed:
 ```sh
 cd docs/paper
 pdflatex Research-Paper.tex
+bibtex Research-Paper
+pdflatex Research-Paper.tex
+pdflatex Research-Paper.tex
 ```
 
-No venue or page limit has been selected. Select and verify these before adopting a submission template. This project is simulation research; physical flight performance is outside its current evidence.
+The paper uses the portal-recommended class, preserved with upstream notices; see docs/paper/TEMPLATE_PROVENANCE.md. The submission plan records verified requirements and remaining manual checks. This project is simulation research; physical flight performance is outside its current evidence.
+
+Local paper checks (compiled PDF optional):
+```sh
+python docs/scripts/check_submission.py
+python docs/scripts/check_submission.py --pdf work/Research-Paper.pdf
+```
+These check selected formatting/anonymity indicators, not scientific readiness or complete venue compliance. The official portal PDF test remains required.
