@@ -168,6 +168,26 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  jsbsim-native-trim-gate:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements-probe.txt
+      - name: Attempt official full and longitudinal trim without flight script
+        run: python code/probe_native_trim.py --output smoke-output/native-trim.json
+      - name: Retain failed trims and post-trim trajectories
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jsbsim-native-trim-gate
+          path: smoke-output/native-trim.json
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
