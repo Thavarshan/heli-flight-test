@@ -188,6 +188,52 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  ardupilot-heli-sitl-smoke:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned MAVLink test library
+        run: python -m pip install pymavlink==2.4.50
+      - name: Get official stable Linux x86-64 SITL executable and upstream heli defaults
+        run: |
+          set -euo pipefail
+          mkdir -p smoke-output/ardupilot
+          curl --fail --location --retry 3 --max-time 45 \
+            https://firmware.ardupilot.org/Copter/stable/SITL_x86_64_linux_gnu/arducopter \
+            --output smoke-output/ardupilot/arducopter
+          curl --fail --location --retry 3 --max-time 20 \
+            https://firmware.ardupilot.org/Copter/stable/SITL_x86_64_linux_gnu/git-version.txt \
+            --output smoke-output/ardupilot/git-version.txt
+          curl --fail --location --retry 3 --max-time 20 \
+            https://raw.githubusercontent.com/ArduPilot/ardupilot/master/Tools/autotest/default_params/copter-heli.parm \
+            --output smoke-output/ardupilot/copter-heli.parm
+          chmod +x smoke-output/ardupilot/arducopter
+          sha256sum smoke-output/ardupilot/arducopter smoke-output/ardupilot/copter-heli.parm | tee smoke-output/ardupilot/sha256.txt
+      - name: Connect to isolated ArduPilot conventional helicopter and verify MAVLink
+        run: |
+          python code/probe_ardupilot_sitl.py \
+            --binary smoke-output/ardupilot/arducopter \
+            --defaults smoke-output/ardupilot/copter-heli.parm \
+            --firmware-metadata smoke-output/ardupilot/git-version.txt \
+            --output smoke-output/ardupilot/sitl-telemetry.json
+      - name: Retain executable identity, console logs and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ardupilot-heli-sitl-prevalidation
+          path: |
+            smoke-output/ardupilot/sha256.txt
+            smoke-output/ardupilot/git-version.txt
+            smoke-output/ardupilot/sitl-telemetry.json
+            smoke-output/ardupilot/sitl-console.log
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
