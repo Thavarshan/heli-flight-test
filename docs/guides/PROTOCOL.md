@@ -29,3 +29,12 @@ Related-work gap verified; protocol frozen; validation documented; raw evidence 
 
 ## Decision amendment — 2026-11-02
 RESEARCH_TOPIC.md specifies the revised primary/secondary research questions and reduction baselines. SUBMISSION_PLAN.md selects the planning venue. The preceding search comparisons are supporting corpus-generation analysis, not the primary hypothesis. Neither these documents nor configs/pilot.json are a frozen confirmatory protocol. Pilot thresholds, sample size and budgets remain unresolved.
+
+## 2026-11-13 safety gate amendment
+The preliminary `h/h2/h4` probe fixed only **observation times**, not
+AFCS/controller execution times. This is not a valid convergence check.
+Before fault injection, freeze a controller/sensor scheduler with an
+independent physical-time clock and verify it does not change under
+integrator refinement. Separate physics-only, controller, model-source
+and disturbance-event effects in numerical sensitivity diagnostics.
+Do not interpret `UNRESOLVED` as a satisfied failure predicate.
