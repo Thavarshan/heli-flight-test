@@ -54,3 +54,35 @@ Important source clarification: the AH-1S aircraft **model** header declares
 GPL with a conditional alternative CC-BY-NC-SA route and admits use of
 estimates; JSBSim engine LGPL licensing does not determine the model license.
 No aircraft/model source is being redistributed in this repository.
+
+## 2026-11-13 development-only position-feedback pilot (not stable hover)
+The independent fresh-instance control-response test succeeded in [CI
+#43403687934](https://github.com/Thavarshan/heli-flight-test/actions/runs/43403687934).
+Each of the four pilot commands produced measurable transient actuator
+response. In the selected 2 s window and primary readouts, the paired
+response signs were + collective-altitude, - longitudinal-pitch-rate,
++ lateral-roll-rate, + pedal-yaw-rate. This is a property of one
+scripted flight state, not an independently validated sign convention.
+
+A second reproducible trial in [CI #43403867980](https://github.com/Thavarshan/heli-flight-test/actions/runs/43403867980)
+compared a heuristic bounded perfect-state position feedback against an
+unchanged stock-script arm, both from the same state at t=45 s for the
+following 25 simulated seconds. The pre-validation experiment yielded:
+- Uncontrolled final horizontal drift from t=45 target: 35.688 m;
+  sampled horizontal RMS error: 20.051 m.
+- Initial feedback controller final drift: 35.300 m;
+  sampled horizontal RMS error: 16.879 m.
+- Fresh-instance replay of the feedback run was exact on this runner.
+- Recorded command-overwrite step count: 0 for this specific window.
+
+These observations **do not establish stationary hover or reliable
+improvement**, because the aircraft begins with drift, the stock script
+and AFCS remain active, gains were an unvalidated first proposal, and
+neither controller stability nor model fidelity was independently
+verified. These are not confirmatory samples, not a paper result, and
+not a general claim that the method works. Retain the complete
+artifacts and this negative end-drift observation. The original
+[hover gate #2](https://github.com/Thavarshan/heli-flight-test/issues/2)
+remains open. Next: isolate a reproducible steady hover initial state,
+remove stock scripted flight events from the controlled phase, validate
+command signs and perform h/h2/h4 convergence tests.

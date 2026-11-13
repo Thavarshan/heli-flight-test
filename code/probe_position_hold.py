@@ -177,7 +177,7 @@ def main():
         "warmup_seconds": WARMUP_S,
         "feedback_seconds": RUN_S,
         "controller_period_s": CONTROL_STEPS * controlled["dt_s"],
-        "same_instance_fresh_replay": True,
+        "fresh_instance_closed_loop_replay": True,
         "stock_script_and_afcs_active": True,
         "baseline": neutral,
         "controlled": controlled,

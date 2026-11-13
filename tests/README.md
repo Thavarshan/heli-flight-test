@@ -19,3 +19,8 @@ experiment resume. Do not infer physics validation from these unit tests.
 Added: pure-Python paired-response classification tests for both monotone
 signs, nonmonotone response, no response, nonfinite data and input validation.
 The JSBSim control-response runner is intentionally labeled exploratory.
+
+Also implemented: `tests/test_hover_controller.py` checks the development
+controller's frame transformation, nominal equilibrium, saturation, assumed
+response directions, invalid input handling and altitude/climb terms.
+These tests prove numerical behavior of code, **not** helicopter stability.

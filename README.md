@@ -87,3 +87,17 @@ The resulting JSON records controls, actuator responses, state differences and
 selected model file hashes. It is **not** a calibrated hover controller and
 must not be interpreted as proof of sign, trim, rotorcraft fidelity or safety.
 See [model audit](docs/guides/MODEL_AUDIT.md) and the linked research gates.
+
+The additional **development-only** position-feedback pilot can be run with
+the same pinned dependencies:
+
+```sh
+python code/probe_position_hold.py --output smoke-output/position-hold-proposal.json
+```
+
+This is **not** a stable-hover MVP: the pilot compares the proposed bounded
+perfect-state feedback against the unmodified scripted demonstration from a
+moving t=45 s starting state. Even if the RMS error is lower, residual drift,
+model fidelity and stock-script coupling still block scientific conclusions.
+The full trial, negative results and assets' hashes are recorded as
+preliminary artifacts and summarized in `results/preliminary/`.
