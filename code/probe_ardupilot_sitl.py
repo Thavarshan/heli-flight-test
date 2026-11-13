@@ -88,10 +88,35 @@ def run(binary,defaults,logfile):
             conn.mav.param_request_read_send(
                 conn.target_system,conn.target_component,b"FRAME_CLASS",-1,
             )
+            # Direct SITL launch has no MAVProxy/GCS to establish telemetry
+            # rates. Explicitly request both streams rather than assuming
+            # the simulator emits them by default.
+            conn.mav.request_data_stream_send(
+                conn.target_system, conn.target_component,
+                mavutil.mavlink.MAV_DATA_STREAM_ALL, 4, 1,
+            )
+            for message_name in ("ATTITUDE", "GLOBAL_POSITION_INT"):
+                conn.mav.command_long_send(
+                    conn.target_system, conn.target_component,
+                    mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL, 0,
+                    getattr(mavutil.mavlink, "MAVLINK_MSG_ID_" + message_name),
+                    250000, 0, 0, 0, 0, 0,
+                )
             frame_class=None
+            retry=0
             while time.monotonic() < deadline and (
                 frame_class is None or not all(k in messages for k in REQUIRED_MSGS)
             ):
+                if time.monotonic() - retry > 7:
+                    conn.mav.param_request_read_send(
+                        conn.target_system,conn.target_component,
+                        b"FRAME_CLASS",-1,
+                    )
+                    conn.mav.request_data_stream_send(
+                        conn.target_system,conn.target_component,
+                        mavutil.mavlink.MAV_DATA_STREAM_ALL,4,1,
+                    )
+                    retry=time.monotonic()
                 m=conn.recv_match(blocking=True,timeout=2)
                 if m is None:
                     continue
