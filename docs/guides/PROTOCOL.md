@@ -38,3 +38,15 @@ independent physical-time clock and verify it does not change under
 integrator refinement. Separate physics-only, controller, model-source
 and disturbance-event effects in numerical sensitivity diagnostics.
 Do not interpret `UNRESOLVED` as a satisfied failure predicate.
+
+## 2026-11-14 implementation clarification
+A new integer-tick `SimulationClock` provides equal physical-time
+external controller/observation update timestamps for h/h2/h4 and
+rejects clocks whose periods cannot be represented exactly. **This
+does not solve the stock aircraft's internal AFCS update coupling.**
+Do not report actual convergence until the full controller+sensor+event
+schedule is decoupled and checked in a simulated flight with validated
+steady hover. The built-in JSBSim longitudinal/full `DoTrim` experiment
+is an exploratory model-feasibility attempt; solver return does not
+suffice to establish helicopter hover, and trim failure is not an
+actual injected controller failure.

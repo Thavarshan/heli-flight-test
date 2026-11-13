@@ -118,3 +118,28 @@ These runners preserve numerical sensitivity, candidate failures and
 exact-replay evidence. They do **not** implement a validated hover
 controller or establish integration-step convergence. See
 [the 2026-11-13 model-validation gate](results/preliminary/2026-11-13-timestep-gate.md).
+
+## Helicopter trim feasibility (work in progress — not CI-verified)
+
+The branch `research/trim-and-controller-clock-20261114` adds a
+standalone JSBSim **built-in trim solver diagnostic**, not a completed
+flight/hover experiment. It uses the documented `simulation/do_trim`
+property for tLongitudinal and tFull, and independent fresh worker
+processes for 0/2/5 knots with timeouts and a subsequent 24-second
+trajectory stationarity screen.
+
+```sh
+python -m unittest discover -s tests -v
+python code/probe_trim.py --output smoke-output/trim-feasibility.json
+```
+
+Expected reports enumerate solver rejections, backend errors and timeouts
+rather than disguising a failed solver as a controller violation. The
+`SimulationClock` unit tests verify the *external* requested control
+and observation instants for h/h2/h4; this helper has **not yet**
+decoupled the stock AH-1S internal AFCS from the physics integrator.
+
+**Verification status:** pushed as an exploratory branch. Full CI has
+not yet run because the current GitHub integration rejected PR creation.
+The existing five user schedules and the weekly regression remain
+unchanged. Do not merge without completing CI and inspecting all cases.

@@ -123,3 +123,27 @@ Next establish a demonstrable trim and a fixed physical-time controller
 clock independent of integration step, then retest convergence and
 hover before adding failures/reduction. Do not promote these observations
 to published evidence of rotorcraft control stability.
+
+## 2026-11-14 trim/control clock investigation (branch, unverified)
+
+Created `research/trim-and-controller-clock-20261114` with:
+- A pure-Python fixed-physical-time `SimulationClock` which rejects
+  noncommensurate physics/control/observation periods and has unit tests
+  for 7.5/3.75/1.875 ms physics steps with 150 ms controller period.
+- A bounded JSBSim AH-1S `simulation/do_trim` feasibility probe using
+  the documented `tFull` and `tLongitudinal` modes, fresh separate
+  worker processes, three very-low-speed initial conditions, worker
+  timeouts, model hashes, 24 s post-solver motion record and the
+  established final-20s stationarity screen.
+- An opt-in PR-only GitHub Actions job (skips weekly schedule) that
+  retains all cases, including solver rejections and backend failures.
+
+**Unverified as of this update:** unable to trigger branch CI because
+GitHub returned `403 Resource not accessible by integration` to
+both PR-creation attempts. No trim result or numerical improvement
+is claimed. The work has been pushed to the branch but not merged.
+The clock helper controls *external experimental scheduling only*:
+the existing AH-1S AFCS still executes on the physics clock.
+Full hover trim/closed-loop control and numerical validation remain
+BLOCKED. Do not freeze scientific thresholds or proceed with fault
+scenarios until experiments pass their independent acceptance gates.

@@ -49,3 +49,18 @@ not license to present negative development runs as controller failures.
 - All outputs remain *preliminary* and no confirmatory corpus is frozen.
 
 This record intentionally makes **no binary backend selection yet**.
+
+## 2026-11-14 next test, pending CI
+A JSBSim **built-in trim** experiment is committed on
+`research/trim-and-controller-clock-20261114`. It uses the official
+`FGFDMExec::DoTrim` modes tLongitudinal (0) and tFull (1) as a
+more principled alternative to arbitrary SFD-inspired pilot commands.
+See [JSBSim's FGTrim reference](https://jsbsim-team.github.io/jsbsim/python/FGTrim.html)
+and [FGFDMExec API](https://jsbsim-team.github.io/jsbsim/classJSBSim_1_1FGFDMExec.html).
+The chosen speeds (0/2/5 knots) are exploratory initial conditions,
+not claims of hover. A 24-second final-window stationarity test
+follows any apparent solver success. Worker timeouts and all failed
+candidates must remain in evidence. Its CI has not run because the
+GitHub connection currently lacks PR-creation permission. No
+selection or rejection of the AH-1S based on these new code changes
+has been made.

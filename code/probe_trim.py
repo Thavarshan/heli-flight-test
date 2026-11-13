@@ -139,9 +139,12 @@ def worker(mode: int, speed: float, output: Path) -> None:
         )
         result["trace"] = samples
     except Exception as e:
-        result["status"] = "TRIM_FAILED_OR_UNRESOLVED"
         result["error_type"] = type(e).__name__
         result["error"] = str(e)
+        trim_specific = ("trim" in result["error_type"].lower()
+                         or "trim failed" in result["error"].lower())
+        result["status"] = ("SOLVER_REJECTED_TRIM" if trim_specific
+                            else "BACKEND_ERROR")
     _save(output, result)
 
 
