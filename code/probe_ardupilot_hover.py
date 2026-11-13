@@ -189,13 +189,22 @@ def attempt(binary,defaults,console):
                     )
                 if phase=="request_guided" and guided:
                     phase="request_arm"
-                    # Local virtual RC rotor-interlock switch on channel 8.
+                    # Traditional heli MUST have interlock DISABLED to arm.
+                    # RC8=1000 is throttle hold (safe), not spool enabled.
+                    conn.mav.rc_channels_override_send(
+                        conn.target_system,conn.target_component,
+                        0,0,0,0,0,0,0,1000,
+                    )
+                    command(conn,mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,1)
+                if phase=="request_arm" and armed:
+                    phase="rotor_runup"
+                    runup_start=now
+                    # Only AFTER positive arm confirmation, enable interlock.
                     conn.mav.rc_channels_override_send(
                         conn.target_system,conn.target_component,
                         0,0,0,0,0,0,0,2000,
                     )
-                    command(conn,mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,1)
-                if phase=="request_arm" and armed:
+                if phase=="rotor_runup" and now-runup_start>=18.0:
                     phase="request_takeoff"
                     command(conn,mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
                             p7=ALTITUDE_TARGET_M)
@@ -211,6 +220,7 @@ def attempt(binary,defaults,console):
                 "start":"GPS_OR_NAVIGATION_UNREADY",
                 "request_guided":"GUIDED_MODE_NOT_ENGAGED",
                 "request_arm":"ARMING_NOT_CONFIRMED",
+                "rotor_runup":"ROTOR_RUNUP_NOT_FINISHED",
                 "request_takeoff":"TAKEOFF_TARGET_NOT_REACHED",
                 "hold":"HOVER_WINDOW_INCOMPLETE",
             }.get(phase,"UNRESOLVED")

@@ -265,7 +265,7 @@ jobs:
         run: |
           set -euo pipefail
           ./waf configure --board sitl
-          ./waf heli -j2
+          ./waf build --target bin/arducopter-heli -j2
           test -x build/sitl/bin/arducopter-heli
       - name: Inspect actual native helicopter build provenance
         run: |
