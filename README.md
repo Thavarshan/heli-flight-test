@@ -101,3 +101,20 @@ moving t=45 s starting state. Even if the RMS error is lower, residual drift,
 model fidelity and stock-script coupling still block scientific conclusions.
 The full trial, negative results and assets' hashes are recorded as
 preliminary artifacts and summarized in `results/preliminary/`.
+
+## Numerical and script-free model feasibility — currently BLOCKED
+
+Run the development-only diagnostic suite after installing pinned
+dependencies (`jsbsim==1.2.3`):
+
+```sh
+python code/probe_timestep.py --output smoke-output/timestep.json
+python code/probe_scriptfree.py --output smoke-output/scriptfree.json
+python code/probe_hover_seed.py --output smoke-output/seed-grid.json
+python code/probe_seed_extended.py --output smoke-output/extended-seed.json
+```
+
+These runners preserve numerical sensitivity, candidate failures and
+exact-replay evidence. They do **not** implement a validated hover
+controller or establish integration-step convergence. See
+[the 2026-11-13 model-validation gate](results/preliminary/2026-11-13-timestep-gate.md).

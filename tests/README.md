@@ -24,3 +24,8 @@ Also implemented: `tests/test_hover_controller.py` checks the development
 controller's frame transformation, nominal equilibrium, saturation, assumed
 response directions, invalid input handling and altitude/climb terms.
 These tests prove numerical behavior of code, **not** helicopter stability.
+
+Added `tests/test_numerical_validation.py` with independent trace
+comparison requirements: common physical-time grid, finite values, SI
+units, expected columns, equal length and explicit UNRESOLVED status for
+invalid traces. Model numeric results are intentionally descriptive.

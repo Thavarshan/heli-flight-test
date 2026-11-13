@@ -75,3 +75,13 @@ This differs from the JSBSim engine LGPL notice. See `MODEL_AUDIT.md`
 for directly linked upstream source and the release-versus-wheel caveat.
 The use of the installed model through a JSBSim wheel does not by itself
 validate its fidelity or grant unrestricted redistribution rights.
+
+## Numerical sensitivity and no-script start feasibility (2026-11-13)
+A fresh round of pinned JSBSim 1.2.3 CI probes demonstrated serious
+physical-time trajectory sensitivity in the stock script and nonsteady
+script-free initialization at 75ft. See the complete descriptive
+`results/preliminary/2026-11-13-timestep-gate.md`.
+The upstream script's AFCS/event evaluation clock changes with integrator
+frequency, hence fixed **observation** timestamps do not imply controlled
+numerical **convergence**. Explicit model trim, controller-clock
+decoupling and independent model validation remain prerequisites.

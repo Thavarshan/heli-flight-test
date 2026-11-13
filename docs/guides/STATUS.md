@@ -96,3 +96,30 @@ replay-aware reduction claims. The narrower step-size/physical-time
 helicopter hypothesis is not a proven novel method, and the authors'
 replication artifacts require inspection. The hover/model-validation
 gate remains open.
+
+## 2026-11-13 numerical/model-validation blocker (new experiments)
+
+The next branch `research/numerical-convergence-gate-20261113` adds:
+a same-physical-observation-clock JSBSim `h/h2/h4` script comparison;
+an independent no-script model+IC initializer; a 16-case bounded SFD
+informed seed sweep; and a fresh-replay 45s extension of the chosen
+development seed. Each has a short-lived CI JSON artifact and explicit
+unresolved/negative outcomes. All results are summarized with runner/CI
+links in `results/preliminary/2026-11-13-timestep-gate.md`.
+
+The stock flight demo differs substantially between h and h/4 (maximum
+north position difference 76.25m, AGL difference 15.39m in this 45s case).
+**Only the observation clock was fixed**; the built-in AFCS/event
+evaluation rate changes with the integration timestep, so this is NOT
+an isolated physics-convergence test. The independent script-free
+75ft initialization almost reached the ground within 4.5s. The SFD-
+informed 9s seed looked temporarily near-zero displacement, but the
+full 45s followup failed the final-window hover screen for all timesteps
+(in the h run, altitude span exceeded 107m). Fresh-instance replay was
+exact within the tested environment.
+
+**Decision:** model validation and stationary hover remain BLOCKED.
+Next establish a demonstrable trim and a fixed physical-time controller
+clock independent of integration step, then retest convergence and
+hover before adding failures/reduction. Do not promote these observations
+to published evidence of rotorcraft control stability.
