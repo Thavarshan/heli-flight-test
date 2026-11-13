@@ -82,7 +82,7 @@ def main():
             other=trial(CONTROL["collective"],CONTROL["longitudinal"],
                         CONTROL["lateral"],duration_s=DURATION_S,dt_s=DT0)
             replay=other=={k:v for k,v in cases["1"].items()
-                           if k not in ("status","hover_screen","dt_s")}
+                           if k not in ("hover_screen","dt_s")}
             for factor in ("2","4"):
                 if cases["1"]["asset_sha256"] != cases[factor]["asset_sha256"]:
                     comparisons[factor]={"status":"UNRESOLVED","reason":"asset_change"}
