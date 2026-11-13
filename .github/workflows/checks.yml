@@ -12,8 +12,31 @@ jobs:
           python-version: '3.11'
       - run: python docs/scripts/check_project.py
       - run: python code/run_experiment.py --config configs/pilot.json --dry-run
-      - run: python -m compileall -q code docs/scripts
+      - run: python -m compileall -q code docs/scripts tests
+      - run: python -m unittest discover -s tests -v
       - run: python docs/scripts/check_submission.py
+
+  jsbsim-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned pilot dependencies
+        run: python -m pip install -r requirements-probe.txt
+      - name: Run AH-1S demonstration twice and screen last window
+        run: python code/probe_backend.py --seconds 45 --output smoke-output/jsbsim-probe.json
+      - name: Check evidence integrity and offline metrics
+        run: python docs/scripts/check_probe_report.py --report smoke-output/jsbsim-probe.json
+      - name: Retain reproducible, explicitly preliminary evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jsbsim-preliminary-smoke
+          path: smoke-output/
+          retention-days: 7
+          if-no-files-found: warn
 
   paper:
     runs-on: ubuntu-latest
