@@ -20,7 +20,7 @@ from heli_lib.control_clock import SimulationClock
 
 DT = .0075
 OBS = .15
-HORIZON = 25.0
+HORIZON = 24.0
 WORKER_TIMEOUT_S = 16
 MODE_NAMES = {0: "longitudinal", 1: "full"}
 # zero and low forward speeds are separate *hypotheses*, not claimed hover.
