@@ -137,10 +137,22 @@ def attempt(binary,defaults,console):
             valid_pos=False
             frame_class=None
             last_update=time.monotonic()
+            last_interlock_override=-100.0
             while time.monotonic()<deadline:
                 now=time.monotonic()
                 if proc.poll() is not None:
                     raise RuntimeError("SITL exited during GUIDED experiment")
+                # MAVLink RC overrides expire unless periodically refreshed.
+                # Keep RC8 LOW until armed; keep it HIGH during runup and
+                # automated takeoff. This only targets our loopback SITL.
+                if (phase in ("request_arm","rotor_runup","request_takeoff","hold")
+                        and now-last_interlock_override >= 0.75):
+                    rc8 = 1000 if phase == "request_arm" else 2000
+                    conn.mav.rc_channels_override_send(
+                        conn.target_system,conn.target_component,
+                        0,0,0,0,0,0,0,rc8,
+                    )
+                    last_interlock_override=now
                 if now-last_update>6:
                     stream_enable(conn)
                     last_update=now
