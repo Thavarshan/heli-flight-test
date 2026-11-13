@@ -147,6 +147,26 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  extended-hover-seed:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements-probe.txt
+      - name: Verify 45s candidate, fresh replay and h/h2/h4 screen
+        run: python code/probe_seed_extended.py --output smoke-output/extended-seed.json
+      - name: Save both successful and negative candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extended-hover-seed-prevalidation
+          path: smoke-output/extended-seed.json
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest

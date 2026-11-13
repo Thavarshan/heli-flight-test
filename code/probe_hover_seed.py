@@ -29,7 +29,7 @@ PEDAL = .39
 DURATION_S = 9.0
 
 
-def trial(collective: float, longitudinal: float, lateral: float) -> dict:
+def trial(collective: float, longitudinal: float, lateral: float,\n          *, duration_s: float = DURATION_S, dt_s: float = DT0) -> dict:
     f = jsbsim.FGFDMExec(None)
     f.set_debug_level(0)
     root = Path(f.get_root_dir())
@@ -37,7 +37,7 @@ def trial(collective: float, longitudinal: float, lateral: float) -> dict:
         raise RuntimeError("cannot load aircraft without script")
     if not f.load_ic(str(root / "aircraft/ah1s/reset00.xml"), True):
         raise RuntimeError("cannot load aircraft initial conditions")
-    f.set_dt(DT0)
+    f.set_dt(dt_s)
     f["ic/h-agl-ft"] = START_AGL_FT
     f["ic/phi-deg"] = math.degrees(PHI_TRIM_RAD)
     f["ic/theta-deg"] = math.degrees(THETA_TRIM_RAD)
@@ -64,9 +64,10 @@ def trial(collective: float, longitudinal: float, lateral: float) -> dict:
         if key not in f.query_property_catalog(key):
             raise RuntimeError("missing model configuration property "+key)
 
-    ticks = round(SAMPLE_PERIOD / DT0)
+    ticks = round(SAMPLE_PERIOD / dt_s)
+    if abs(ticks*dt_s-SAMPLE_PERIOD)>1e-9:\n        raise ValueError('physics step does not divide observation period')
     rows = []
-    for observation in range(round(DURATION_S / SAMPLE_PERIOD)+1):
+    for observation in range(round(duration_s / SAMPLE_PERIOD)+1):
         if observation:
             for _ in range(ticks):
                 for name, val in settings.items():
