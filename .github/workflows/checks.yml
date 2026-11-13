@@ -107,6 +107,26 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  script-free-probe:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements-probe.txt
+      - name: Test independently loaded AH-1S without any stock flight script
+        run: python code/probe_scriptfree.py --output smoke-output/scriptfree.json
+      - name: Preserve negative and unresolved observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scriptfree-prevalidation
+          path: smoke-output/scriptfree.json
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
