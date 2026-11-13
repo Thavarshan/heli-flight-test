@@ -72,7 +72,7 @@ class HoverScreenTests(unittest.TestCase):
     def test_bad_sampling_and_short_coverage_are_unresolved(self):
         short = trajectory()[:10]
         self.assertEqual(screen_hover_window(REQUIRED, short)["reason"], "insufficient_duration")
-        sparse = trajectory()[::6]
+        sparse = trajectory()[::4]
         self.assertEqual(screen_hover_window(REQUIRED, sparse)["reason"], "sample_gap_exceeds_limit")
 
     def test_invalid_configuration_rejected(self):
