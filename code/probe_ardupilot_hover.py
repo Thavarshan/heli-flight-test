@@ -145,9 +145,14 @@ def attempt(binary,defaults,console):
                 # MAVLink RC overrides expire unless periodically refreshed.
                 # Keep RC8 LOW until armed; keep it HIGH during runup and
                 # automated takeoff. This only targets our loopback SITL.
-                if (phase in ("request_arm","rotor_runup","request_takeoff","hold")
+                if (phase in ("start","request_guided","request_arm",
+                              "rotor_runup","request_takeoff","hold")
                         and now-last_interlock_override >= 0.75):
-                    rc8 = 1000 if phase == "request_arm" else 2000
+                    # Maintain throttle hold throughout GPS/EKF startup,
+                    # before switching mode and requesting arm.
+                    rc8 = 1000 if phase in (
+                        "start","request_guided","request_arm"
+                    ) else 2000
                     conn.mav.rc_channels_override_send(
                         conn.target_system,conn.target_component,
                         0,0,0,0,0,0,0,rc8,
