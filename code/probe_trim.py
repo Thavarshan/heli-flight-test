@@ -104,9 +104,15 @@ def worker(mode: int, speed: float, output: Path) -> None:
         if not f.run_ic():
             raise RuntimeError("run_ic failed")
         result["before_trim"] = _state(f)
-        # JSBSim FGFDMExec official DoTrim modes: 0=longitudinal, 1=full.
-        # Direct trim, not simulation/do_simple_trim, with exceptions captured.
-        f["simulation/do_trim"] = mode
+        # Pinned JSBSim 1.2.3 FGFDMExec.cpp binds this write-only
+        # property directly to DoTrim(int); the similarly named
+        # simulation/do_trim is NOT a registered 1.2.3 property.
+        # Verify it exists: Python property setters can create unknown
+        # scalar nodes, which would otherwise yield a false "success".
+        trim_prop = "simulation/do_simple_trim"
+        if trim_prop not in f.query_property_catalog(trim_prop):
+            raise RuntimeError("pinned JSBSim lacks the expected DoTrim property")
+        f[trim_prop] = mode
         result["solver_returned"] = True
         result["after_trim"] = _state(f)
         clock = SimulationClock(DT, OBS, OBS)

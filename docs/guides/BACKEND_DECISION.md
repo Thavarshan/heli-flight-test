@@ -64,3 +64,5 @@ candidates must remain in evidence. Its CI has not run because the
 GitHub connection currently lacks PR-creation permission. No
 selection or rejection of the AH-1S based on these new code changes
 has been made.
+
+Exact model-version binding reviewed: [JSBSim v1.2.3 FGFDMExec.cpp](https://github.com/JSBSim-Team/jsbsim/blob/v1.2.3/src/FGFDMExec.cpp) uses `simulation/do_simple_trim` as a **write-only** property tied to `DoTrim(int)`; the similar `simulation/do_trim` is not registered in that revision. The experimental runner explicitly checks the property catalog before setting it to avoid accidentally creating a no-op property. This corrects an initial unexecuted branch implementation error.

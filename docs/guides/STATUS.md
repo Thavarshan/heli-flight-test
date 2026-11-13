@@ -130,7 +130,7 @@ Created `research/trim-and-controller-clock-20261114` with:
 - A pure-Python fixed-physical-time `SimulationClock` which rejects
   noncommensurate physics/control/observation periods and has unit tests
   for 7.5/3.75/1.875 ms physics steps with 150 ms controller period.
-- A bounded JSBSim AH-1S `simulation/do_trim` feasibility probe using
+- A bounded JSBSim AH-1S `simulation/do_simple_trim` feasibility probe using
   the documented `tFull` and `tLongitudinal` modes, fresh separate
   worker processes, three very-low-speed initial conditions, worker
   timeouts, model hashes, 24 s post-solver motion record and the

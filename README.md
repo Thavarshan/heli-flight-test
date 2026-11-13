@@ -123,7 +123,7 @@ controller or establish integration-step convergence. See
 
 The branch `research/trim-and-controller-clock-20261114` adds a
 standalone JSBSim **built-in trim solver diagnostic**, not a completed
-flight/hover experiment. It uses the documented `simulation/do_trim`
+flight/hover experiment. It uses the documented `simulation/do_simple_trim`
 property for tLongitudinal and tFull, and independent fresh worker
 processes for 0/2/5 knots with timeouts and a subsequent 24-second
 trajectory stationarity screen.
