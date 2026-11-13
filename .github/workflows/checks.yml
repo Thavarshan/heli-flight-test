@@ -242,6 +242,73 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  ardupilot-compiled-heli-flight:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: ArduPilot/ardupilot
+          ref: fb773567896014da007bca58358704d4a0d8516f
+          submodules: recursive
+          path: ardupilot-source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned research telemetry dependencies
+        run: python -m pip install pymavlink==2.4.50 empy==3.3.4 future pyserial pexpect pyyaml
+      - name: Configure and compile exact HELI_FRAME ArduCopter target
+        working-directory: ardupilot-source
+        run: |
+          set -euo pipefail
+          ./waf configure --board sitl
+          ./waf heli -j2
+          test -x build/sitl/bin/arducopter-heli
+      - name: Inspect actual native helicopter build provenance
+        run: |
+          set -euo pipefail
+          mkdir -p smoke-output/ardupilot-heli
+          git -C ardupilot-source rev-parse HEAD | tee smoke-output/ardupilot-heli/source-commit.txt
+          sha256sum ardupilot-source/build/sitl/bin/arducopter-heli | tee smoke-output/ardupilot-heli/sha256.txt
+          cp ardupilot-source/Tools/autotest/default_params/copter-heli.parm smoke-output/ardupilot-heli/copter-heli.parm
+          python - <<'PY'
+          from pathlib import Path
+          source = Path('ardupilot-source/ArduCopter/wscript').read_text()
+          assert "program_name='arducopter-heli'" in source
+          assert "defines=['FRAME_CONFIG=HELI_FRAME']" in source
+          print("source: helicopter-specific FRAME_CONFIG=HELI_FRAME verified")
+          PY
+      - name: Verify helicopter-specific autopilot frame, telemetry and GPS navigation
+        run: |
+          python code/probe_ardupilot_sitl.py \
+            --binary ardupilot-source/build/sitl/bin/arducopter-heli \
+            --defaults smoke-output/ardupilot-heli/copter-heli.parm \
+            --firmware-metadata smoke-output/ardupilot-heli/source-commit.txt \
+            --output smoke-output/ardupilot-heli/sitl-telemetry.json
+      - name: Try actual guided takeoff with HELI_FRAME autopilot
+        run: |
+          python code/probe_ardupilot_hover.py \
+            --binary ardupilot-source/build/sitl/bin/arducopter-heli \
+            --defaults smoke-output/ardupilot-heli/copter-heli.parm \
+            --output smoke-output/ardupilot-heli/guided-hover.json
+      - name: Preserve full flight and negative-outcome evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ardupilot-native-heli-flight-gate
+          path: |
+            smoke-output/ardupilot-heli/source-commit.txt
+            smoke-output/ardupilot-heli/sha256.txt
+            smoke-output/ardupilot-heli/sitl-telemetry.json
+            smoke-output/ardupilot-heli/sitl-console.log
+            smoke-output/ardupilot-heli/guided-hover.json
+            smoke-output/ardupilot-heli/sitl-guided-console.log
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
