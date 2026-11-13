@@ -37,3 +37,16 @@ Freeze a shared evaluation corpus of unique failure cases from development-indep
 3. By 2026-12-18: freeze confirmatory protocol and source versions. If related work already implements the same idea, pivot to a clearly scoped replication/benchmark study or select a different contribution.
 
 These dates are internal targets. The AH-1S package is a simulation testbed candidate, not a validated unmanned helicopter or a real-flight dataset. Model validation is still the first implementation milestone.
+
+## Novelty-risk amendment — 2026-11-13
+The July 2026 preprint by Valle, Ali and Arrieta (arXiv:2607.25695)
+already includes repeated failure-preserving CPS input reduction and
+environment-aware optimization. This materially narrows the plausible
+contribution. Our proposed replay set tests specific numerical
+integration refinements with physical-time disturbance semantics and
+held-out perturbations, which differs from stochastic repeated tests
+**in the proposed protocol**, but novelty and usefulness remain
+unverified. A validated stable-hover model and full-method comparison
+are blocking requirements, as is at least one repeated-run baseline or
+an explicit, justified difference in assumptions. If the idea is
+already implemented, pivot transparently to benchmarking/replication.

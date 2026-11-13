@@ -86,3 +86,13 @@ artifacts and this negative end-drift observation. The original
 remains open. Next: isolate a reproducible steady hover initial state,
 remove stock scripted flight events from the controlled phase, validate
 command signs and perform h/h2/h4 convergence tests.
+
+## 2026-11-13 latest prior-art alert
+A primary-source July 2026 arXiv preprint on stochastic, environment-aware
+failure-preserving CPS delta debugging was located and added to
+`RELATED_WORK.md`, `LITERATURE.md` and the provisional manuscript
+bibliography. This establishes a **high overlap risk** for general
+replay-aware reduction claims. The narrower step-size/physical-time
+helicopter hypothesis is not a proven novel method, and the authors'
+replication artifacts require inspection. The hover/model-validation
+gate remains open.
