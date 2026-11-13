@@ -86,6 +86,27 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  timestep-probe:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install JSBSim pinned exploratory backend
+        run: python -m pip install -r requirements-probe.txt
+      - name: Compare same-clock h, h/2, h/4 trajectories
+        run: python code/probe_timestep.py --output smoke-output/timestep-probe.json
+      - name: Preserve descriptive evidence and backend failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: timestep-prevalidation
+          path: smoke-output/timestep-probe.json
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
