@@ -221,6 +221,12 @@ jobs:
             --defaults smoke-output/ardupilot/copter-heli.parm \
             --firmware-metadata smoke-output/ardupilot/git-version.txt \
             --output smoke-output/ardupilot/sitl-telemetry.json
+      - name: Try isolated GUIDED arm, takeoff and sampled hover
+        run: |
+          python code/probe_ardupilot_hover.py \
+            --binary smoke-output/ardupilot/arducopter \
+            --defaults smoke-output/ardupilot/copter-heli.parm \
+            --output smoke-output/ardupilot/guided-hover.json
       - name: Retain executable identity, console logs and evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -231,6 +237,8 @@ jobs:
             smoke-output/ardupilot/git-version.txt
             smoke-output/ardupilot/sitl-telemetry.json
             smoke-output/ardupilot/sitl-console.log
+            smoke-output/ardupilot/guided-hover.json
+            smoke-output/ardupilot/sitl-guided-console.log
           retention-days: 7
           if-no-files-found: warn
 
