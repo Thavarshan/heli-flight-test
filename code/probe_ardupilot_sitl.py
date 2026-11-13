@@ -15,6 +15,7 @@ import tempfile
 import time
 
 from pymavlink import mavutil
+from heli_lib.sitl_validation import valid_navigation
 
 MAVLINK_PORT = 5760
 FRAME_CLASS_HELI = 6
@@ -104,6 +105,9 @@ def run(binary,defaults,logfile):
                 )
             frame_class=None
             retry=0
+            invalid_position_count=0
+            last_unusable_position=None
+            gps_raw=None
             while time.monotonic() < deadline and (
                 frame_class is None or not all(k in messages for k in REQUIRED_MSGS)
             ):
@@ -132,12 +136,23 @@ def run(binary,defaults,logfile):
                         "roll_rad":float(m.roll), "pitch_rad":float(m.pitch),
                         "yaw_rad":float(m.yaw),
                     }
+                if kind=="GPS_RAW_INT":
+                    gps_raw = {"fix_type":int(m.fix_type),
+                               "satellites_visible":int(m.satellites_visible),
+                               "lat_deg":float(m.lat)*1e-7,
+                               "lon_deg":float(m.lon)*1e-7}
                 if kind=="GLOBAL_POSITION_INT":
-                    messages[kind]={
+                    pos={
                         "lat_deg":float(m.lat)*1e-7,
                         "lon_deg":float(m.lon)*1e-7,
                         "relative_alt_m":float(m.relative_alt)*1e-3,
                     }
+                    if valid_navigation(pos["lat_deg"],pos["lon_deg"],
+                                        pos["relative_alt_m"]):
+                        messages[kind]=pos
+                    else:
+                        invalid_position_count+=1
+                        last_unusable_position=pos
             status = ("HELICOPTER_TELEMETRY_READY"
                       if frame_class==FRAME_CLASS_HELI
                       and all(k in messages for k in REQUIRED_MSGS)
@@ -148,6 +163,9 @@ def run(binary,defaults,logfile):
                 "expected_frame_class":FRAME_CLASS_HELI,
                 "model_argument":"heli",
                 "messages":messages,
+                "invalid_position_samples":invalid_position_count,
+                "last_unusable_position":last_unusable_position,
+                "latest_gps_raw":gps_raw,
                 "startup_command":cmd,
             }
         finally:
