@@ -33,3 +33,11 @@ Next scientific blocking step: understand AH-1S model/control signs and
 build a genuinely closed-loop fixed-position hover controller. Validate nominal
 hover against independent published behaviour and at h / h/2 / h/4 before
 freezing gusts or delay, or running confirmatory failure reduction.
+
+## 2026-11-13 measured smoke-run evidence
+The pinned Linux JSBSim demonstration ran 6,000 steps and replayed exactly, but
+the last 20 s did not meet the exploratory hover screen (42.35 m horizontal
+excursion, 10.59 m AGL altitude variation). See
+`results/preliminary/2026-11-13-ah1s-stationarity.md` and the linked CI
+run. This is a **negative preliminary observation** and further confirms that
+fixed-position hover is still the blocking scientific milestone.
