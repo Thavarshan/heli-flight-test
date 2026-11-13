@@ -1,7 +1,7 @@
 name: project-checks
 on:
   push:
-    branches: [main]
+    branches: [main, research/jsbsim-trim-to-sitl-pivot-20261114]
   pull_request:
   workflow_dispatch:
   # Lightweight weekly regression check: Monday 08:47 Asia/Colombo (03:17 UTC).

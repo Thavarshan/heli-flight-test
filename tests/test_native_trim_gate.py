@@ -1,37 +1,39 @@
-"""Regression checks for fail-closed JSBSim native trim gate."""
+"""Tests the real trim gate, independent of the JSBSim installation."""
 import sys
-import types
-from pathlib import Path
 import unittest
+from pathlib import Path
 
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"code"))
-from heli_lib.hover_metrics import screen_hover_window
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "code"))
+from heli_lib.trim_gate import decide
 
 
 class HoverValidationGateTest(unittest.TestCase):
-    def test_only_screened_pass_candidate_can_advance(self):
-        # No simulated or inferred success if trim was rejected.
-        def decision(entries):
-            if not entries:
-                return "UNRESOLVED"
-            passed = [entry for entry in entries
-                      if entry["status"] == "POST_TRIM_SCREENED"
-                      and entry["screen"]["status"] == "PASS_CANDIDATE"]
-            if passed:
-                return "TRIM_CANDIDATE_NOT_VALIDATED"
-            if any(x["status"] == "BACKEND_ERROR" for x in entries):
-                return "UNRESOLVED"
-            return "NO_STABLE_HOVER_IN_BOUNDED_NATIVE_TRIM_TRIALS"
-        self.assertEqual(decision([{"status":"TRIM_REJECTED"}]),
-                         "NO_STABLE_HOVER_IN_BOUNDED_NATIVE_TRIM_TRIALS")
-        self.assertEqual(decision([{"status":"BACKEND_ERROR"}]),"UNRESOLVED")
-        self.assertEqual(decision([{"status":"POST_TRIM_SCREENED",
-                                   "screen":{"status":"FAIL_CANDIDATE"}}]),
-                         "NO_STABLE_HOVER_IN_BOUNDED_NATIVE_TRIM_TRIALS")
-        self.assertEqual(decision([{"status":"POST_TRIM_SCREENED",
-                                   "screen":{"status":"PASS_CANDIDATE"}}]),
-                         "TRIM_CANDIDATE_NOT_VALIDATED")
+    def test_empty_is_unresolved(self):
+        self.assertEqual(decide([]), "UNRESOLVED")
+
+    def test_trim_rejection_does_not_advance(self):
+        self.assertEqual(
+            decide([{"status":"TRIM_REJECTED"}]),
+            "NO_STABLE_HOVER_IN_BOUNDED_NATIVE_TRIM_TRIALS",
+        )
+
+    def test_backend_error_is_not_a_control_failure(self):
+        self.assertEqual(decide([{"status":"BACKEND_ERROR"}]), "UNRESOLVED")
+
+    def test_screen_failure_blocks(self):
+        self.assertEqual(
+            decide([{"status":"POST_TRIM_SCREENED",
+                     "screen":{"status":"FAIL_CANDIDATE"}}]),
+            "NO_STABLE_HOVER_IN_BOUNDED_NATIVE_TRIM_TRIALS",
+        )
+
+    def test_still_not_model_validated_if_screen_passes(self):
+        self.assertEqual(
+            decide([{"status":"POST_TRIM_SCREENED",
+                     "screen":{"status":"PASS_CANDIDATE"}}]),
+            "TRIM_CANDIDATE_NOT_VALIDATED",
+        )
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     unittest.main()
