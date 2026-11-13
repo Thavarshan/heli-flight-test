@@ -67,3 +67,11 @@ The checker verifies the full trajectory SHA-256, stored endpoints, replay
 flag and freshly computed screen; CI retains the run as a short-lived
 artifact. Saved `results/preliminary/jsbsim-probe.json` predates this
 extension; never interpret missing new fields as scientific findings.
+
+## Model-specific source clarification
+The AH-1S `ah1s.xml` file carries a GPL notice, conditional alternative
+CC-BY-NC-SA language, explicit model limitations, and nonvalidated estimates.
+This differs from the JSBSim engine LGPL notice. See `MODEL_AUDIT.md`
+for directly linked upstream source and the release-versus-wheel caveat.
+The use of the installed model through a JSBSim wheel does not by itself
+validate its fidelity or grant unrestricted redistribution rights.

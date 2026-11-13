@@ -15,3 +15,7 @@ Outstanding: true controller reset independence, actuator-sign sanity,
 timestep convergence (h, h/2, h/4), sensor timestamp/delay semantics, gust
 injection, frozen failure predicates, model fidelity, and provenance-aware
 experiment resume. Do not infer physics validation from these unit tests.
+
+Added: pure-Python paired-response classification tests for both monotone
+signs, nonmonotone response, no response, nonfinite data and input validation.
+The JSBSim control-response runner is intentionally labeled exploratory.

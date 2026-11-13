@@ -71,3 +71,19 @@ python docs/scripts/check_submission.py
 python docs/scripts/check_submission.py --pdf work/Research-Paper.pdf
 ```
 These check selected formatting/anonymity indicators, not scientific readiness or complete venue compliance. The official portal PDF test remains required.
+
+## Exploratory model/control investigation (not flight validation)
+
+The separate control-response probe compares paired fresh-instance pilot
+control perturbations **while the stock AFCS and script remain active**:
+
+```sh
+python -m pip install -r requirements-probe.txt
+python -m unittest discover -s tests -v
+python code/probe_control_responses.py --output smoke-output/control-responses.json
+```
+
+The resulting JSON records controls, actuator responses, state differences and
+selected model file hashes. It is **not** a calibrated hover controller and
+must not be interpreted as proof of sign, trim, rotorcraft fidelity or safety.
+See [model audit](docs/guides/MODEL_AUDIT.md) and the linked research gates.

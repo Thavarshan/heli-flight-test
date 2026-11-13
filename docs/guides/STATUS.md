@@ -41,3 +41,16 @@ excursion, 10.59 m AGL altitude variation). See
 `results/preliminary/2026-11-13-ah1s-stationarity.md` and the linked CI
 run. This is a **negative preliminary observation** and further confirms that
 fixed-position hover is still the blocking scientific milestone.
+
+## 2026-11-13 follow-on: control-response investigation
+A separate feature branch `research/control-response-audit-20261113`
+adds a paired open-loop control-response runner, offline response classifier
+tests, a GitHub Actions evidence artifact and the AH-1S model license/limitations
+audit. CI results and any observed local response must be recorded before
+calling the work completed; nothing here is stable fixed-position hover.
+See `docs/guides/MODEL_AUDIT.md`.
+
+Important source clarification: the AH-1S aircraft **model** header declares
+GPL with a conditional alternative CC-BY-NC-SA route and admits use of
+estimates; JSBSim engine LGPL licensing does not determine the model license.
+No aircraft/model source is being redistributed in this repository.
