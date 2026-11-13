@@ -49,3 +49,28 @@ not license to present negative development runs as controller failures.
 - All outputs remain *preliminary* and no confirmatory corpus is frozen.
 
 This record intentionally makes **no binary backend selection yet**.
+
+## Focused stop-and-pivot decision (2026-11-14)
+
+**JSBSim AH-1S: stop bounded feasibility search.** Three model/AFCS
+configurations times two native trims produced zero trimmed states.
+See CI #43528782116. The experiment establishes no viable hover
+startup **in the attempted configurations**, not a general negative
+claim about JSBSim.
+
+**ArduPilot SITL: conditional candidate, NOT yet validated replacement.**
+A true `arducopter-heli` source build is required. Using generic
+`arducopter` with `FRAME_CLASS=6` gave misleadingly successful MAVLink
+initialization, followed by firmware-type pre-arm failure. Source commit
+`fb773567896014da007bca58358704d4a0d8516f` is frozen for the
+native heli build. Require independently observed valid position,
+GUIDED+arm acceptance, rotor spool, takeoff and stationary 20-second
+screen; then stable nominal repeats and replay methodology. These are
+separate evidence gates.
+
+If the native heli build cannot reproduce a stable hover, keep both
+backends unvalidated and explicitly reopen model selection. Never
+bypass prearm checks. The conventional-heli SITL source uses a small
+4.54 kg example, not the AH-1S airframe, and does not establish physical
+fidelity by itself. Full case record:
+`results/preliminary/2026-11-14-native-trim-and-sitl.md`.

@@ -118,3 +118,18 @@ These runners preserve numerical sensitivity, candidate failures and
 exact-replay evidence. They do **not** implement a validated hover
 controller or establish integration-step convergence. See
 [the 2026-11-13 model-validation gate](results/preliminary/2026-11-13-timestep-gate.md).
+
+## Current helicopter backend investigation (2026-11-14)
+
+**Scientific gate remains blocked.** The bounded JSBSim AH-1S native trim
+attempt failed in all six configurations. ArduPilot's generic binary
+can emit simulated heli telemetry but rejects arm because **the separate
+`arducopter-heli` target must be used** for a traditional helicopter.
+
+The repository includes a pinned-source, headless GitHub Actions
+HELI_FRAME build and real MAVLink startup/GUIDED/hover-probe runner
+(`code/probe_ardupilot_sitl.py`, `code/probe_ardupilot_hover.py`).
+Source and negative outcomes are recorded in
+[the backend trial report](results/preliminary/2026-11-14-native-trim-and-sitl.md).
+A working simulated vehicle is **not** evidence of flight-model validity,
+stable nominal hover, deterministic replay or an accepted paper.

@@ -38,3 +38,16 @@ independent physical-time clock and verify it does not change under
 integrator refinement. Separate physics-only, controller, model-source
 and disturbance-event effects in numerical sensitivity diagnostics.
 Do not interpret `UNRESOLVED` as a satisfied failure predicate.
+
+## 2026-11-14 backend-selection amendment (pilot only)
+
+If the ArduPilot conventional-helicopter SITL is adopted, update the
+research airframe class from modeled AH-1S to the small ~4.54 kg
+conventional helicopter in the pinned ArduPilot SITL source, and do
+not retain aircraft-specific performance or controller claims across
+backends. The first necessary positive evidence is helicopter-specific
+firmware, valid GPS position and motor interlock/rotor-runup before a
+**measured** stationary position-hold gate. A green CI test that simply
+launches the process does not satisfy this gate. No disturbance or
+scenario-reduction confirmatory experiment is authorized until the new
+backend passes fixed-clock, true-state and replay validation separately.

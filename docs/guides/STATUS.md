@@ -123,3 +123,26 @@ Next establish a demonstrable trim and a fixed physical-time controller
 clock independent of integration step, then retest convergence and
 hover before adding failures/reduction. Do not promote these observations
 to published evidence of rotorcraft control stability.
+
+## 2026-11-14: Bounded native hover trim rejected; SITL heli-source build under test
+
+A one-shot JSBSim 1.2.3 native-trim gate using direct model/IC
+load and the engine's `simulation/do_simple_trim` property tested
+3 setup configurations x 2 trim modes. **All 6 returned TrimFailureError
+(Trim Failed)** in [CI #43528782116](https://github.com/Thavarshan/heli-flight-test/actions/runs/43528782116).
+This ends the approved focused AH-1S exploration; it does not prove JSBSim
+cannot trim helicopters.
+
+ArduPilot's generic prebuilt Copter SITL did start successfully: frame
+class 6, heartbeat, attitude and later valid home GPS telemetry in
+[CI #43529203470](https://github.com/Thavarshan/heli-flight-test/actions/runs/43529203470).
+The real autonomous GUIDED trial was blocked at arming:
+`PreArm: Motors: Check frame class and type`, observed in
+[CI #43529370167](https://github.com/Thavarshan/heli-flight-test/actions/runs/43529370167).
+Upstream build metadata explicitly demands the separate
+`bin/arducopter-heli` binary compiled with `FRAME_CONFIG=HELI_FRAME`.
+A pinned-source helicopter-specific build/test job now attempts this,
+with safe motor interlock and automatic evidence artifacts. Model/hover
+validation remains **BLOCKED** until this actual flight experiment passes
+and reproducibility/convergence are demonstrated. See
+`results/preliminary/2026-11-14-native-trim-and-sitl.md`.
