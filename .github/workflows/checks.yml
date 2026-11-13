@@ -127,6 +127,26 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  sfd-seed-screen:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements-probe.txt
+      - name: Investigate SFD-inspired script-free steady-start candidates
+        run: python code/probe_hover_seed.py --output smoke-output/sfd-seeds.json
+      - name: Preserve all cases including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sfd-seed-prevalidation
+          path: smoke-output/sfd-seeds.json
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
