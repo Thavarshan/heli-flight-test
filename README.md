@@ -2,7 +2,7 @@
 
 Working title: Replay-Stable Reduction of Helicopter Hover-Control Failure Scenarios.
 
-Status: preliminary backend feasibility. A pinned JSBSim AH-1S example runs headlessly and replays identically within the tested local environment; fixed-position hover is not yet validated. No helicopter backend, autopilot, experimental results, or novelty claim has been validated yet. No AI/ML or model training is planned.
+Status: preliminary backend feasibility and exploratory hover stationarity screening. A pinned JSBSim AH-1S example runs headlessly and replays identically within the tested local environment; fixed-position hover is not yet validated. No helicopter backend, autopilot, experimental results, or novelty claim has been validated yet. No AI/ML or model training is planned.
 
 See [preliminary feasibility](docs/guides/FEASIBILITY.md) and `code/probe_backend.py` for the first executable milestone.
 
@@ -35,7 +35,24 @@ python code/run_experiment.py --config configs/pilot.json --dry-run
 python docs/scripts/check_project.py
 ```
 
-The runner deliberately cannot execute flights yet. First follow `docs/guides/ROADMAP.md`. Final experiment execution must save resolved configuration, source revision, backend/model hashes, environment, seed, trajectories and metrics. Resume only when all provenance matches.
+The research experiment runner deliberately cannot execute scientific flights yet. First follow `docs/guides/ROADMAP.md`. Final experiment execution must save resolved configuration, source revision, backend/model hashes, environment, seed, trajectories and metrics. Resume only when all provenance matches.
+
+The preliminary AH-1S probe can now produce an auditable, non-scientific
+stationarity screen (it does **not** establish fixed-position hover). With
+the pinned Python dependencies installed:
+
+```sh
+python -m pip install -r requirements-probe.txt
+python -m unittest discover -s tests -v
+python code/probe_backend.py --seconds 45 --output smoke-output/jsbsim-probe.json
+python docs/scripts/check_probe_report.py --report smoke-output/jsbsim-probe.json
+```
+
+The report, its separate trajectory JSON, exact-replay flag and hashes are
+verified together. `PASS_CANDIDATE` only indicates the defined exploratory
+stationarity limits were met; it cannot replace trim/model validation, physical
+flight evidence or the scientific protocol. The GitHub Actions smoke job
+uploads preliminary evidence artifacts.
 
 Paper compilation, once LaTeX is installed:
 ```sh

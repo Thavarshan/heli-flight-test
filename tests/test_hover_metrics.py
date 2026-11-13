@@ -52,7 +52,7 @@ class HoverScreenTests(unittest.TestCase):
                     "FAIL_CANDIDATE",
                 )
 
-    def test_missing_displacement_is_unresolved(self):
+    def test_missing_required_telemetry_is_unresolved(self):
         names = list(REQUIRED[:-1])
         self.assertEqual(
             screen_hover_window(names, [row[:-1] for row in trajectory()])["status"],
