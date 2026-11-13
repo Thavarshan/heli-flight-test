@@ -29,7 +29,8 @@ PEDAL = .39
 DURATION_S = 9.0
 
 
-def trial(collective: float, longitudinal: float, lateral: float,\n          *, duration_s: float = DURATION_S, dt_s: float = DT0) -> dict:
+def trial(collective: float, longitudinal: float, lateral: float,
+          *, duration_s: float = DURATION_S, dt_s: float = DT0) -> dict:
     f = jsbsim.FGFDMExec(None)
     f.set_debug_level(0)
     root = Path(f.get_root_dir())
@@ -65,7 +66,8 @@ def trial(collective: float, longitudinal: float, lateral: float,\n          *, 
             raise RuntimeError("missing model configuration property "+key)
 
     ticks = round(SAMPLE_PERIOD / dt_s)
-    if abs(ticks*dt_s-SAMPLE_PERIOD)>1e-9:\n        raise ValueError('physics step does not divide observation period')
+    if abs(ticks*dt_s-SAMPLE_PERIOD)>1e-9:
+        raise ValueError('physics step does not divide observation period')
     rows = []
     for observation in range(round(duration_s / SAMPLE_PERIOD)+1):
         if observation:
