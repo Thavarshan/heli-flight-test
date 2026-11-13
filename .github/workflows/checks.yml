@@ -45,6 +45,47 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
+  control-response-probe:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned JSBSim
+        run: python -m pip install -r requirements-probe.txt
+      - name: Compare fresh-instance pilot control perturbations
+        run: python code/probe_control_responses.py --output smoke-output/control-responses.json
+      - name: Retain exploratory control-response evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: control-response-prevalidation
+          path: smoke-output/control-responses.json
+          retention-days: 7
+          if-no-files-found: warn
+
+  feedback-pilot:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements-probe.txt
+      - name: Run deterministic stock-script development feedback comparison
+        run: python code/probe_position_hold.py --output smoke-output/position-hold-proposal.json
+      - name: Preserve complete exploratory comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: position-hold-exploratory
+          path: smoke-output/position-hold-proposal.json
+          retention-days: 7
+          if-no-files-found: warn
+
   paper:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest

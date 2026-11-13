@@ -24,3 +24,23 @@ These are an initial screen, not a systematic review. Next: inspect full methods
 
 ## Focused review update
 See RELATED_WORK.md for the current comparison, including prior helicopter-model debugging and robotic-vehicle input minimization. The selected hypothesis and novelty gates are in RESEARCH_TOPIC.md. Replace any claim that helicopter testing or failure reduction itself is new with a precise, evidenced method comparison.
+
+## New nearest-method sources screened — 2026-11-13
+- Valle, Pablo; Ali, Shaukat; Arrieta, Aitor (2026), *Delta Debugging for
+  Cyber-Physical Systems with Flaky Test Executions*, arXiv:2607.25695,
+  posted 28 July 2026. Primary abstract, introduction and approach overview
+  inspected. It uses repeated statistical failure preservation and
+  environment-aware minimization. Strong overlap; **not** a peer-reviewed
+  publication claim. Source: https://arxiv.org/abs/2607.25695
+- *Towards the Isolation of Failure-Inducing Inputs in Cyber-Physical
+  Systems: is Delta Debugging Enough?*, IEEE SANER 2022,
+  DOI 10.1109/SANER53432.2022.00072. Publisher abstract inspected,
+  full-method reproduction pending. Source:
+  https://doi.org/10.1109/SANER53432.2022.00072
+- Zeller and Hildebrandt, 2025 retrospective on delta debugging;
+  institutional publication summary inspected; full text pending:
+  https://cispa.de/en/research/publications/84689-simplifying-and-isolating-failure-inducing-input-a-retrospective-on-delta-debugging
+
+Consequence: any broad novelty claim about replay-aware input reduction
+is currently unjustified. Compare all three methods and freeze baselines
+after the validated hover pilot. See RELATED_WORK.md.

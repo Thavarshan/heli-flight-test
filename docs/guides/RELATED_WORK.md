@@ -15,3 +15,48 @@ This is a bounded primary-source review, not a systematic review or proof of abs
 Read complete reduction/falsification methods and citation trails, especially ADGFUZZ, delta debugging, numerical sensitivity, and robust counterexample simplification. Record exact failure-preservation predicates, reduction grammars, reset semantics, and evaluation units. Investigate [Simplifying and Isolating Failure-Inducing Input](https://doi.org/10.1109/32.988498) as the foundational delta-debugging baseline; full text was not retrieved in this session. Do not claim a new delta-debugging algorithm.
 
 Candidate gap to test: whether retaining the same hover violation across a declared numerical replay set during continuous-input reduction yields a useful simplicity/retention/cost trade-off. This remains an inference from the inspected subset. No accepted-paper outcome is promised.
+
+## 2026-11-13 novelty-alert update (important overlap)
+
+1. **Valle, Ali and Arrieta, [*Delta Debugging for Cyber-Physical Systems
+   with Flaky Test Executions*](https://arxiv.org/abs/2607.25695)
+   (arXiv preprint posted 28 July 2026).** Inspected abstract, method
+   overview and introduction in the primary full-text rendering.
+   The authors formulate failure clustering and **repeated statistical
+   execution-based preservation** for CPS input reduction, with optimized
+   and environment-aware variants, and evaluate on a stochastic elevator
+   controller and simulated mobile robot. Their reported observation
+   that reduced inputs may reproduce failures *more* reliably is
+   directly relevant to our working replay-retention hypothesis.
+   **Novelty risk: HIGH** for any broad claim that replay-aware
+   failure-preserving CPS input minimization is new. The possible narrower
+   distinction is deterministic *physical-time gust/sensor-delay*
+   reduction subjected to *specified integrator step-size and held-out
+   initial-state replays* on a validated conventional helicopter hover
+   system. Whether that distinction is sufficient remains **unknown**
+   until full-method/reproduction comparison, validated hover and pilot
+   experiments. The source is currently a **preprint**; do not imply
+   journal or conference peer review.
+2. **[*Towards the Isolation of Failure-Inducing Inputs in
+   Cyber-Physical Systems: is Delta Debugging Enough?*](https://doi.org/10.1109/SANER53432.2022.00072),
+   SANER 2022.** Publisher abstract inspected, not full artifact.
+   The work already adapts delta debugging to Simulink CPS failures and
+   studies three models. Therefore CPS delta-debugging adaptation is
+   clearly established; read its full method before finalizing baselines.
+3. **Zeller and Hildebrandt,
+   [*Simplifying and Isolating Failure-Inducing Input: A Retrospective
+   on Delta Debugging*](https://cispa.de/en/research/publications/84689-simplifying-and-isolating-failure-inducing-input-a-retrospective-on-delta-debugging),
+   institutional publication page (2025).** Publication page/summary
+   inspected, not the entire full paper. General DD and input
+   minimization remain established foundations rather than our novelty.
+
+### Required protocol change before confirmatory freeze
+Include *statistical repeated-run and environment-aware reduction* as
+a close-method comparator or explain its infeasibility with a transparent
+cost model. The final research question must distinguish **deterministic
+numerical discretization sensitivity** from **stochastic test flakiness**.
+Do not describe fresh-instance byte-identical replay as stochastic
+robustness. Inspect the 2026 preprint's exact acceptance and cost
+accounting and evaluate its publicly reported replication materials
+before publishing a method novelty claim. This is a novelty-risk warning,
+**not a conclusion that the proposed method is already identical**.
