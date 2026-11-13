@@ -30,3 +30,40 @@ Sources inspected:
 
 ## Next experiment
 Inspect AH-1S controller and trim properties; establish a documented hover initialization and fixed-position reference. Log position, attitude, body velocity, rotor speed and controls. Check control signs and timestep sensitivity. Use a trusted reference to assess model behaviour before testing novel search.
+
+## 2026-11-13 reproducibility extension
+
+The upstream [AH-1S flight test script](https://github.com/JSBSim-Team/jsbsim/blob/master/scripts/ah1s_flight_test.xml)
+describes variant **1** as maximum speed flight and includes a temporary
+approximately 75 ft AGL hover-like phase before flying off. It is **not**
+an autonomous fixed-position hold experiment. The probe keeps variant 1
+and now records displacement-from-start north/east (metres), body
+velocity (ft/s), AGL (ft), roll/pitch (radians), and rotor RPM.
+[JSBSim documentation](https://jsbsim-team.github.io/jsbsim/classJSBSim_1_1FGFDMExec.html)
+distinguishes loading an aircraft and initializing a simulation from
+validating its flight behaviour; even kinematically consistent initial
+conditions are not automatically trim.
+
+The last 20 seconds are screened using **development-only** limits:
+peak body speed <= 1.0 m/s, maximum displacement from the window start
+<= 3.0 m, altitude span <= 2.0 m, maximum absolute roll/pitch <= 10
+degrees, minimum AGL >= 5 m, rotor speed >= 1 RPM. These numbers are
+engineering screening choices, **not** aviation standards or frozen
+scientific failure thresholds. A missing property, nonfinite state,
+duplicate timestamp, incomplete window or sampling gap > 1 s yields
+`UNRESOLVED`, not a favorable result. `PASS_CANDIDATE` never means
+"validated hover." No physical-aircraft fidelity or control stability
+claim follows from any result of this script.
+
+Reproduce the screen after installing `requirements-probe.txt`:
+
+```sh
+python -m unittest discover -s tests -v
+python code/probe_backend.py --seconds 45 --output smoke-output/jsbsim-probe.json
+python docs/scripts/check_probe_report.py --report smoke-output/jsbsim-probe.json
+```
+
+The checker verifies the full trajectory SHA-256, stored endpoints, replay
+flag and freshly computed screen; CI retains the run as a short-lived
+artifact. Saved `results/preliminary/jsbsim-probe.json` predates this
+extension; never interpret missing new fields as scientific findings.
