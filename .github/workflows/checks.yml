@@ -1,5 +1,12 @@
 name: project-checks
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  # Lightweight weekly regression check: Monday 08:47 Asia/Colombo (03:17 UTC).
+  # GitHub schedules only run on the default branch after this PR is merged.
+  schedule:
+    - cron: '17 3 * * 1'
 permissions:
   contents: read
 jobs:
@@ -39,6 +46,7 @@ jobs:
           if-no-files-found: warn
 
   paper:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
