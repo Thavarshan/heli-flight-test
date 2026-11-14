@@ -125,6 +125,8 @@ def attempt(binary,defaults,console):
         armed=False
         takeoff_sent=False
         target_reached=False
+        arm_attempts=0
+        next_arm_attempt_at=float("inf")
         phase="start"
         try:
             conn,_=connect_sitl(proc,deadline)
@@ -206,13 +208,16 @@ def attempt(binary,defaults,console):
                     )
                 if phase=="request_guided" and guided:
                     phase="request_arm"
-                    # Traditional heli MUST have interlock DISABLED to arm.
-                    # RC8=1000 is throttle hold (safe), not spool enabled.
-                    conn.mav.rc_channels_override_send(
-                        conn.target_system,conn.target_component,
-                        0,0,0,0,0,0,0,1000,
-                    )
+                    # The navigation EKF may still be acquiring a healthy
+                    # position estimate despite GPS fix and a valid position
+                    # packet. Let it settle while throttle hold stays LOW.
+                    next_arm_attempt_at=now+8.0
+                if (phase=="request_arm" and not armed
+                        and now>=next_arm_attempt_at
+                        and arm_attempts<4):
                     command(conn,mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,1)
+                    arm_attempts+=1
+                    next_arm_attempt_at=now+12.0
                 if phase=="request_arm" and armed:
                     phase="rotor_runup"
                     runup_start=now
@@ -252,6 +257,7 @@ def attempt(binary,defaults,console):
                 "navigation_valid":valid_pos,
                 "guided_mode_seen":guided,
                 "armed_seen":armed,
+                "arm_attempts":arm_attempts,
                 "takeoff_sent":takeoff_sent,
                 "target_reached":target_reached,
                 "screen":screen,
