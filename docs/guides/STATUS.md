@@ -146,3 +146,30 @@ with safe motor interlock and automatic evidence artifacts. Model/hover
 validation remains **BLOCKED** until this actual flight experiment passes
 and reproducibility/convergence are demonstrated. See
 `results/preliminary/2026-11-14-native-trim-and-sitl.md`.
+
+## 2026-11-14 verified ArduPilot native-heli hover bootstrap
+
+The source-pinned `arducopter-heli` build successfully produced a true
+helicopter firmware binary (HELI_FRAME; MAV_TYPE_HELICOPTER=4) with valid
+position telemetry in [CI #43531219815](https://github.com/Thavarshan/heli-flight-test/actions/runs/43531219815).
+After standard arming retries while the simulated AHRS/EKF settled (3 arm
+attempts), the autopilot armed, the rotor ran up, and GUIDED reached 8m.
+The last 20s navigation-telemetry screen passed: 0.2833m maximum
+horizontal excursion, 0.046m altitude span, 0.1438m/s peak sampled
+horizontal speed, 101 valid navigation samples, minimum 7.974m
+relative-home altitude. Full trace and logs:
+[artifact](https://github.com/Thavarshan/heli-flight-test/actions/runs/43531219815/artifacts/14088385696).
+
+**Backend decision:** ArduPilot traditional-heli SITL is now the *preferred
+working engineering candidate*, but only **pre-validation** hover
+(`PASS_CANDIDATE_NOT_VALIDATED`). Scientific model/nominal-hover
+validation is still open; no independently measured physics ground-truth
+hover, repeated identical trials, fixed sensor/controller clock,
+h/h2/h4 convergence, external aircraft-model validation or replay
+reduction has been demonstrated. This is not a confirmatory paper result.
+The original JSBSim AH-1S negative evidence remains valid.
+
+To keep zero-cost GitHub Actions practical, the source-intensive native
+heli build runs on PR/manual dispatch, never weekly and not on ordinary
+main pushes; generic wrong-firmware smoke is manual-only. The existing
+weekly GitHub cron and all ChatGPT schedules were not modified.

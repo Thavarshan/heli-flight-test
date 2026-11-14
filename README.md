@@ -133,3 +133,15 @@ Source and negative outcomes are recorded in
 [the backend trial report](results/preliminary/2026-11-14-native-trim-and-sitl.md).
 A working simulated vehicle is **not** evidence of flight-model validity,
 stable nominal hover, deterministic replay or an accepted paper.
+
+### First ArduPilot helicopter-specific hover candidate (development)
+
+[CI #43531219815](https://github.com/Thavarshan/heli-flight-test/actions/runs/43531219815)
+built ArduPilot 4.7.2 `arducopter-heli` from source, armed normally
+after EKF readiness, completed rotor run-up, flew to 8m and passed a
+20-second exploratory hold screen based on 101 sampled position messages.
+Maximum horizontal excursion was 0.283m and altitude span 0.046m.
+The [complete recorded pilot and limitations](results/preliminary/2026-11-14-native-trim-and-sitl.md)
+are available. **This is not validated helicopter flight dynamics or
+confirmed numerical/replay stability.** Source-heavy heli experiments
+run in GitHub Actions only on PR/manual dispatch (no added schedule).

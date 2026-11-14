@@ -51,3 +51,17 @@ firmware, valid GPS position and motor interlock/rotor-runup before a
 launches the process does not satisfy this gate. No disturbance or
 scenario-reduction confirmatory experiment is authorized until the new
 backend passes fixed-clock, true-state and replay validation separately.
+
+## 2026-11-14 nominal ArduPilot hover bootstrap gate
+
+A first `arducopter-heli` native-heli startup and autopilot-guided
+navigation-based hover screen passed (CI #43531219815, 20s at 8m;
+no disturbance). Promote it only to **development candidate**.
+Before freezing a confirmatory corpus: run independent fresh-instance
+replicates and compare direct simulator ground truth against estimated
+MAVLink navigation states; separate fixed physical-time controller/sensor
+updates from integrator changes; set non-post-hoc tolerances and perform
+an explicit model-provenance/physics-validity audit. The prior AH-1S
+airframe cannot be treated as physically equivalent to the ~4.54kg
+ArduPilot SITL model. No gust, delay or scenario reduction is valid
+research evidence until these gates pass.

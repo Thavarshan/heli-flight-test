@@ -41,3 +41,17 @@ A separate GitHub Actions job `ardupilot-compiled-heli-flight` checks out ArduPi
 - Upstream heli source and AH-1S model have different aircraft masses, control assumptions and physical validation limits. Never pool their trajectories.
 - Current MAVLink samples and wall-clock command timing are not lockstep simulator replay.
 - Do not conduct gust/delay experiments or confirmatory replay reduction on this incomplete baseline.
+
+## 5. First successful helicopter-specific simulated hover (pre-validation only)
+
+[CI run #43531219815](https://github.com/Thavarshan/heli-flight-test/actions/runs/43531219815) completed successfully on the dedicated helicopter executable. [Raw 7-day flight/console artifact](https://github.com/Thavarshan/heli-flight-test/actions/runs/43531219815/artifacts/14088385696). Every CI job in this run, including manuscript compilation and Python tests, returned success; importantly, the experiment's own scientific status is `PASS_CANDIDATE_NOT_VALIDATED`, **not** `VALIDATED_HOVER`.
+
+- Source: ArduPilot Copter 4.7.2 commit `fb773567896014da007bca58358704d4a0d8516f`; compiled native heli binary SHA-256 `239972b6dc3920398b9779393a5cdbd5b9515e9f67aea80839efe1e9af8f2894`.
+- Build: `bin/arducopter-heli` with `FRAME_CONFIG=HELI_FRAME`; verified heartbeat `MAV_TYPE_HELICOPTER=4` and `FRAME_CLASS=6`, simulated GPS and position.
+- Motor safety sequence: RC8 throttle hold LOW from startup; 8s guided-mode EKF settling wait; 3 normal arm attempts (the first two were rejected while AHRS/position estimate settled). Arming eventually succeeded *without disabling any checks*. RC8 HIGH after arming, rotor run-up completed; GUIDED 8m takeoff target was reached.
+- Observation: final 20.0 simulated seconds, 101 `GLOBAL_POSITION_INT` messages, **maximum horizontal excursion 0.283304m**, **altitude span 0.046m**, **maximum sampled horizontal speed 0.143771m/s**, minimum altitude relative to home **7.974m**. The existing exploratory 3m horizontal, 2m vertical, 1m/s sample-speed and 5m minimum-height screen was passed.
+- The diagnostic consumes sampled autopilot-estimated GPS/navigation state at 5Hz, **not** a separately measured simulator ground-truth trajectory. It uses wall-clock MAVLink commands; there is no controlled multi-run numerical convergence or exact deterministic replay yet. The autopilot's own controller makes this an *autopilot-in-the-loop* hover, not an independently validated controller algorithm.
+- There has been **one** successful recorded nominal trial at this specific version/setup. No held-out trials, disturbances, sensor delays, flight-dynamics fidelity validation or confirmatory scenario reduction. This is the engineering bootstrap needed to run the next validation gate, not a research-paper result.
+
+**Conditional backend choice:** ArduPilot's *helicopter-specific* SITL is now a working nominal hover **candidate** and is the preferred engineering testbed. Scientific approval remains conditional upon fresh-instance repeatability, appropriately isolated clocks, an independently checked ground-truth stationary screen and documented aircraft-model limitations. The earlier JSBSim negative results are retained, not blended with these trajectories.
+

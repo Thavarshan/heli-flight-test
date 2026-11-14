@@ -1,7 +1,7 @@
 name: project-checks
 on:
   push:
-    branches: [main, research/jsbsim-trim-to-sitl-pivot-20261114]
+    branches: [main]
   pull_request:
   workflow_dispatch:
   # Lightweight weekly regression check: Monday 08:47 Asia/Colombo (03:17 UTC).
@@ -189,7 +189,9 @@ jobs:
           if-no-files-found: warn
 
   ardupilot-heli-sitl-smoke:
-    if: github.event_name != 'schedule'
+    # Historical generic Copter mismatch test: not the accepted heli backend.
+    # Explicit/manual only; no wasted 135s pre-arm probe on every commit.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     steps:
@@ -243,7 +245,8 @@ jobs:
           if-no-files-found: warn
 
   ardupilot-compiled-heli-flight:
-    if: github.event_name != 'schedule'
+    # Expensive pinned heli source build: PR and manual only, never scheduled.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     timeout-minutes: 25
     steps:
@@ -258,6 +261,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Cache pinned upstream SITL build output
+        uses: actions/cache@v4
+        with:
+          path: ardupilot-source/build
+          key: ardupilot-heli-sitl-${{ runner.os }}-fb773567896014da007bca58358704d4a0d8516f-v1
       - name: Install pinned research telemetry dependencies
         run: python -m pip install pymavlink==2.4.50 empy==3.3.4 future pyserial pexpect pyyaml
       - name: Configure and compile exact HELI_FRAME ArduCopter target

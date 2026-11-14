@@ -74,3 +74,25 @@ bypass prearm checks. The conventional-heli SITL source uses a small
 4.54 kg example, not the AH-1S airframe, and does not establish physical
 fidelity by itself. Full case record:
 `results/preliminary/2026-11-14-native-trim-and-sitl.md`.
+
+## Backend selection update after actual helicopter hover (2026-11-14)
+
+**Provisional engineering backend selected: ArduPilot native
+`arducopter-heli`**, not generic multicopter `arducopter`.
+The source-pinned (ArduPilot 4.7.2, `fb773567...`) helicopter-specific
+binary produced an authentic MAV_TYPE_HELICOPTER=4 heartbeat, valid
+GPS/home navigation, accepted regular arming on the third attempt after
+EKF settling, completed rotor runup, and held approximately 8m altitude
+for a 20-second exploratory navigation-telemetry window in
+[CI #43531219815](https://github.com/Thavarshan/heli-flight-test/actions/runs/43531219815).
+Source and detailed numbers:
+`results/preliminary/2026-11-14-native-trim-and-sitl.md`.
+
+**Do not confuse this with research backend acceptance:** one sampled
+autopilot-estimated nav trace passing a loose development screen does
+not establish independent hover physics truth, flight-model fidelity,
+numerical timestep invariance or deterministic failure replay. Before
+injecting or minimizing failures, require replicated independent fresh
+starts, a direct simulator state comparison, a documented external
+reference, controlled sensor/controller/event clocks and negative-
+outcome handling. The JSBSim no-trim evidence is retained unchanged.
